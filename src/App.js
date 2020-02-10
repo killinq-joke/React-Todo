@@ -1,6 +1,24 @@
 import React from 'react';
 import TodoList from './components/TodoComponents/TodoList';
+import TodoForm from './components/TodoComponents/TodoForm';
 import uuid from 'uuid';
+
+const initialTodos = [
+  {
+    task: 'Organize Garage',
+    id: uuid(),
+    completed: true
+  },
+  {
+    task: 'Bake Cookies',
+    id: uuid(),
+    completed: false
+  }
+];
+
+const fakeTodosEndpoint = () => {
+  return Promise.resolve(initialTodos);
+};
 
 class App extends React.Component {
     constructor() {
@@ -10,6 +28,21 @@ class App extends React.Component {
           newTodoValue: '',
 
       }
+  }
+
+  componentDidMount() {
+   
+    fakeTodosEndpoint()
+      .then(todos => {
+        this.setState(oldState => { 
+          return {
+           
+            todos,
+            
+          }
+        })
+        
+      })
   }
 
   valueChange = event => {
@@ -37,24 +70,37 @@ class App extends React.Component {
     })
   }
 
-  // markCompleted = id => {
-    
-  //   this.setState(oldState => {
-  //     return {
-  //       todos: oldState.map(todo => {
-  //         todo
-  //       })
+//   markCompleted = id => {
+//     this.setState(oldState => {
+//       let newState = oldState.todos.map(todo => {
+//         console.log(todo.completed)
+//       if (todo.id === id){
         
-  //     }
-  //   })
-  // }
+//         todo.completed === !todo.completed ;
+  
+//       }
+//       console.log(newState)
+//       return{
+//         todos: newState,
+//       }
+
+//     })
+    
+//   })
+    
+// }
+        
+        
+        
+    
+    
+  
 
   clearCompleted = event => {
     this.setState(oldState => {
-          const arr = oldState.map();
-          console.log(arr);
+     
       return {
-        todos: arr.filter(todo => todo.completed === false)
+        todos: oldState.todos.filter(todo => todo.completed === false)
           
         }
       })
@@ -65,16 +111,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {this.state.todos.map(todo => {
-          const color = todo.completed ? 'green' : 'red'
-          console.log(todo.task);
-          return(
-          <a style={{ color }}  key={todo.id}>{todo.task}</a>
-          )
-        })}
-        <input onChange={this.valueChange}></input>
-        <button onClick={this.addTodo}>Add Todo</button>
-        <button onClick={this.clearCompleted}>Clear Completed</button>
+        <TodoList todos={this.state.todos}/>
+        <TodoForm clearCompleted={this.clearCompleted} addTodo={this.addTodo} valueChange={this.valueChange}/>
+        
       </div>
     );
   }
