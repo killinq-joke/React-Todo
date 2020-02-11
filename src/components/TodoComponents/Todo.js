@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 
 class Todo extends Component {
+    
     render() {
         
     const color = this.props.todo.completed ? 'green' : 'red';  
@@ -9,7 +10,7 @@ class Todo extends Component {
         return(
             
             <div style={{ color }} key={this.props.todo.id}>{this.props.todo.task}
-                <button>check</button>
+                <button onClick={this.props.markCompleted}>check</button>
             </div>
         )
     }
